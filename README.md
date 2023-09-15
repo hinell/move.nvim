@@ -9,6 +9,9 @@ https://user-images.githubusercontent.com/8136158/212197110-f817a514-93d5-4118-9
 
 https://user-images.githubusercontent.com/8136158/212197112-b352d25d-63f3-4a4d-893a-3efe52a81052.mp4
 
+![word](https://user-images.githubusercontent.com/26419570/227013070-6c5e041c-c500-4944-8c83-79d5d54f6394.gif)
+
+
 ## Requirements
 
 This plugin works with NeoVim v0.5 or later.
@@ -41,44 +44,32 @@ Plug "hinell/move.nvim"
 
 The plugin provides the following commands. Every command accept `[0-9]+` number:
 
-| Command    | Description | Mode |
+| Command    | Description | Modes |
 |------------|-------------|------|
 | MoveLine   | Moves a line up or down | Normal |
 | MoveBlock  | Moves a selected block of text, up or down | Visual |
+| MoveWord   | Moves the word under the cursor forwards or backwards | Normal |
 | MoveHChar  | Moves the character under the cursor, left or right | Normal |
 | MoveHBlock | Moves a visual area, left or right | Visual |
 
 ## Setup
 
-Setup step is optiona. By default, plugin doesn't automatically bind any keymaps.
+NO keybindings are setup by default. </br>
+See [Legendary integration] to setup your keymaps via [Legendary.nvim] plugin.
 
-See [**Legendary Integratiton**](#Legendary_Integraiton) below for more info on default keybindings.
-
-#### VimScript
-
-``` vim-script
-" Normal-mode commands
-nnoremap <silent> <A-j> :MoveLine 1<CR>
-nnoremap <silent> <A-k> :MoveLine -1<CR>
-nnoremap <silent> <A-l> :MoveHChar 1<CR>
-nnoremap <silent> <A-h> :MoveHChar -1<CR>
-
-" Visual-mode commandzmzs
-xnoremap <silent> <A-j> :MoveBlock 1<CR>
-xnoremap <silent> <A-k> :MoveBlock -1<CR>
-vnoremap <silent> <A-l> :MoveHBlock 1<CR>
-vnoremap <silent> <A-h> :MoveHBlock -1<CR>
-```
+[Legendary.nvim]: https://github.com/mrjones2014/legendary.nvim
 
 #### Lua
+
+Alternatively, you can setup <kbd>ALT+...</kbd> hotkeys manually:
 
 ``` lua
 local opts = { noremap = true, silent = true }
 -- Normal-mode commands
-vim.keymap.set('n', '<A-Up>'    ,':MoveLine 1<CR>', opts)
-vim.keymap.set('n', '<A-Down>'  ,':MoveLine -1<CR>', opts)
-vim.keymap.set('n', '<A-Left>'  ,':MoveHChar -1<CR>', opts)
-vim.keymap.set('n', '<A-Right>' ,':MoveHChar 1<CR>', opts)
+vim.keymap.set('n', '<A-Up>'      ,':MoveLine 1<CR>', opts)
+vim.keymap.set('n', '<A-Down>'    ,':MoveLine -1<CR>', opts)
+vim.keymap.set('n', '<A-S-Left>'  ,':MoveWord -1<CR>', opts)
+vim.keymap.set('n', '<A-S-Right>' ,':MoveWord 1<CR>', opts)
 
 -- Visual-mode commands
 vim.keymap.set('x', '<A-Up>'   , ':MoveBlock 1<CR>', opts)
@@ -90,22 +81,58 @@ vim.keymap.set('v', '<A-Right>', ':MoveHBlock 1<CR>', opts)
 
 ```
 
+#### VimScript
 
-### [Legendary](https://github.com/mrjones2014/legendary.nvim#quickstart) integration
-> **Note**: you don't need to setup keymaps (above) if you are using Legendary
+Not recommended.
 
-```lua
- -- The following step is optional
- -- and sets up Legendary keybindings (Alt+Arrow keys) 
-    require("move").setup()
+``` vim-script
+" Normal-mode commands
+nnoremap <silent> <A-j> :MoveLine 1<CR>
+nnoremap <silent> <A-k> :MoveLine -1<CR>
+nnoremap <silent> <A-l> :MoveHChar 1<CR>
+nnoremap <silent> <A-h> :MoveHChar -1<CR>
 
- -- You can extend with your own mapping
-    require("move").keymaps()
+" Visual-selection-mode commands
+xnoremap <silent> <A-j> :MoveBlock 1<CR>
+xnoremap <silent> <A-k> :MoveBlock -1<CR>
+vnoremap <silent> <A-l> :MoveHBlock 1<CR>
+vnoremap <silent> <A-h> :MoveHBlock -1<CR>
 ```
 
-## CREDITS
+### Legendary integration
 
-Original author of the plugin is `fedepujol@github.com`. Most of the code can be is attributed to him.
+[Legendary integration]: #legendary-integration
+
+> **Note**: _if you did setup keybindings manually by `vim.keymap.set(...)`, you don't need this_
+
+See [`lua/move/init.lua`](lua/move/init.lua) for list of default mappings.
+
+```lua
+ -- This sets up Legendary keybindings for <A-...> keys
+    require("move").setup()
+
+ -- You can also extend default keymap with your own mappings:
+    local legendary = require("legendary")
+    local defaultKeymaps = require("move").keymap
+    local keymaps =  vim.tbl_extend("force", defaultKeymaps, {
+        { mode = { "n" } ,"<A-Up>", ":MoveBlock  1<CR>", description = "Line: ...", opts = { noremap = true } }
+    })
+
+    legendary.keymaps(keymaps)
+```
+
+## Thanks
+
+There is an original and more feature rich plugin (written in VimScript):
+
+[vim-move](https://github.com/matze/vim-move).
+
+**Original author**: thanks to `fedepujol@github.com`. Most of the code can be is attributed to him.
 I made a few impromements over `fedepujol`'s work: added `plugin/init.lua` for better compatibility and updated media.
-There is an original and more feature rich plugin (written in VimScript): 
-- [vim-move](https://github.com/matze/vim-move).
+
+
+## See also 
+* [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+
+----
+> September 15, 2023
