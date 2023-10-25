@@ -1,0 +1,15 @@
+# https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
+name: Feature request
+description: "Feature requests aren't expected, but you can try"
+labels: ["enhancement"]
+assignees:
+  - hinell
+body:
+  - type: markdown
+    attributes:
+      value: "See also [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) and [DISCUSSIONS](../discussions)"
+  - type: textarea
+    id: feature-summary
+    attributes:
+      label: Summary
+      placeholder: "Be brief, time is invaluable commodity that only few can afford"

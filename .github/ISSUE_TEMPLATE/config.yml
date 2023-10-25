@@ -1,0 +1,4 @@
+blank_issues_enabled: false
+  - name: Question
+    url: ../../discussions
+    about: Please create a GitHub Discussion for general questions
